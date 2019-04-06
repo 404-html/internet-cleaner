@@ -11,20 +11,22 @@ const askForBadWord = () => {
 	});
 }
 
-const navigateToSearchPage = (badWord) => {
+const fetchSearchResults = (badWord) => {
 	return new Promise((resolve, reject) => {
-		document.addEventListener('DOMContentLoaded', resolve, false);
-		window.location = Consts.GITHUB_SEARCH_PAGE_URL.replace('QUERY', badWord);
-		setTimeout(() => {
-			console.log('okokS');
-		}, 3000);
+		fetch(Consts.GITHUB_SEARCH_PAGE_URL.replace('QUERY', badWord))
+			.then(function (response) {
+				return response;
+			})
+			.then(function (response) {
+				console.log(response);
+			});
 	})
 }
 
 
 
 askForBadWord()
-.then(navigateToSearchPage)
+.then(fetchSearchResults)
 .then(() => {
 		console.log('I\'m done!');
 	})
