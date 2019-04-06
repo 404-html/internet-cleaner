@@ -13,24 +13,26 @@ const askForBadWord = () => {
 
 const fetchSearchResults = (badWord) => {
 	return new Promise((resolve, reject) => {
-		fetch(Consts.GITHUB_SEARCH_PAGE_URL.replace('QUERY', badWord))
-			.then(function (response) {
-				return response;
-			})
-			.then(function (response) {
-				console.log(response);
-			});
-	})
+
+		const xmlhttp =  new XMLHttpRequest();
+		xmlhttp.onreadystatechange = function () {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+				resolve(xmlhttp.responseText);
+			}
+		}
+		xmlhttp.onerror(reject);
+		xmlhttp.open('GET', Consts.GITHUB_SEARCH_PAGE_URL.replace('QUERY', badWord), true);
+		xmlhttp.send();
+	});
 }
 
 
-
 askForBadWord()
-.then(fetchSearchResults)
-.then(() => {
-		console.log('I\'m done!');
-	})
-	.catch((ex) => {
-		console.warn('Something went wrong! Bad side of Internet is defending itself...');
-		console.warn(ex)
-	});
+	.then(fetchSearchResults)
+	.then(() => {
+			console.log('I\'m done!');
+		})
+		.catch((ex) => {
+			console.warn('Something went wrong! Bad side of Internet is defending itself...');
+			console.warn(ex)
+		});
