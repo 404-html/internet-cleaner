@@ -20,15 +20,30 @@ const fetchSearchResults = (badWord) => {
 				resolve(xmlhttp.responseText);
 			}
 		}
-		xmlhttp.onerror(reject);
-		xmlhttp.open('GET', Consts.GITHUB_SEARCH_PAGE_URL.replace('QUERY', badWord), true);
+		xmlhttp.open('GET',
+			Consts.GITHUB_SEARCH_PAGE_URL
+			.replace('QUERY', badWord)
+			.replace('PAGE', Math.floor(Math.random() * 100) + 1), // random page number from 1 to 100
+			true);
 		xmlhttp.send();
+	});
+}
+
+const pickRandomFile = (html) => {
+	return new Promise((resolve, reject) => {
+		const container = document.createElement('div');
+		container.innerHTML = html;
+		const files = container.querySelectorAll('.code-list-item');
+		const fileIndex = Math.floor(Math.random() * files.length) + 1;
+		const fileUrl = files[fileIndex].querySelector('a:nth-child(2)').href;
+		window.location = fileUrl;
 	});
 }
 
 
 askForBadWord()
 	.then(fetchSearchResults)
+	.then(pickRandomFile)
 	.then(() => {
 			console.log('I\'m done!');
 		})
