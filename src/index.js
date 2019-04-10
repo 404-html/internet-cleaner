@@ -20,6 +20,7 @@ const fetchSearchResults = (badWord) => {
 				resolve(xmlhttp.responseText);
 			}
 		}
+		// TODO: reject on failure
 		xmlhttp.open('GET',
 			Consts.GITHUB_SEARCH_PAGE_URL
 			.replace('QUERY', badWord)
@@ -35,15 +36,68 @@ const pickRandomFile = (html) => {
 		container.innerHTML = html;
 		const files = container.querySelectorAll('.code-list-item');
 		const fileIndex = Math.floor(Math.random() * files.length) + 1;
-		const fileUrl = files[fileIndex].querySelector('a:nth-child(2)').href;
-		window.location = fileUrl;
+		let fileUrl = files[fileIndex].querySelector('a:nth-child(2)').href;
+
+		fileUrl = fileUrl.split('/')
+			.map((item, index) => {
+				// if (index === 5) { return 'edit'; } 	// replace 'blob' with 'edit'
+				if (index === 6) { return 'master'; } 	// replace blob GUID with master
+				return item;
+			}).join('/')
+		resolve(fileUrl);
 	});
 }
 
+const fetchFileForm = (url) => {
+	return new Promise((resolve, reject) => {
+
+		const xmlhttp =  new XMLHttpRequest();
+		xmlhttp.onreadystatechange = function () {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+				const container = document.createElement('div');
+				container.innerHTML = xmlhttp.responseText;
+				const auth_token_input = container.querySelector('.octicon-pencil').parentElement.parentElement.querySelectorAll('input')[1];
+
+				resolve({
+					url,
+					token: auth_token_input.value
+				});
+			}
+		}
+		// TODO: reject on failure
+		xmlhttp.open('GET', url);
+		xmlhttp.send();
+	});
+}
+
+const fetchEditForm = (data) => {
+	return new Promise((resolve, reject) => {
+
+		const xmlhttp =  new XMLHttpRequest();
+		xmlhttp.onreadystatechange = function () {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+
+				document.open("text/html", "replace");
+				document.write(xmlhttp.responseText);
+				document.close();
+
+				resolve(xmlhttp.responseText);
+			}
+		}
+		// TODO: reject on failure
+		xmlhttp.open('POST', data.url.replace('/blob/', '/edit/'));
+		var formData = new FormData();
+		formData.append('utf8', '✓');
+		formData.append('authenticity_token', data.token);
+		xmlhttp.send(formData);
+	});
+}
 
 askForBadWord()
 	.then(fetchSearchResults)
 	.then(pickRandomFile)
+	.then(fetchFileForm)
+	.then(fetchEditForm)
 	.then(() => {
 			console.log('I\'m done!');
 		})
