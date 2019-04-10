@@ -99,6 +99,7 @@ askForBadWord()
 	.then(fetchFileForm)
 	.then(fetchEditForm)
 	.then(() => {
+			document.querySelector('#commit-description-textarea').value = 'Powered by Internet Cleaner ®'
 			console.log('I\'m done!');
 		})
 		.catch((ex) => {
