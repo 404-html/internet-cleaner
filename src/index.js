@@ -1,8 +1,11 @@
 import Consts from './const'
 
+let badWord = 'fuck';
+let niceWord = 'butterfly';
+
 const askForBadWord = () => {
 	return new Promise((resolve, reject) => {
-		const badWord = prompt('Enter the word you want to get rid from Internet:')
+		badWord = prompt('Enter the word you want to get rid from Internet (leave empty to use custom):')
 		if(badWord) {
 			resolve(badWord);
 		} else {
@@ -11,7 +14,7 @@ const askForBadWord = () => {
 	});
 }
 
-const fetchSearchResults = (badWord) => {
+const fetchSearchResults = () => {
 	return new Promise((resolve, reject) => {
 
 		const xmlhttp =  new XMLHttpRequest();
@@ -77,8 +80,9 @@ const fetchEditForm = (data) => {
 		xmlhttp.onreadystatechange = function () {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 
+				let html = xmlhttp.responseText.replace(new RegExp(badWord, 'ig'), niceWord);
 				document.open("text/html", "replace");
-				document.write(xmlhttp.responseText);
+				document.write(html);
 				document.close();
 
 				resolve(xmlhttp.responseText);
