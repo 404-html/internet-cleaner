@@ -1,7 +1,8 @@
 import Consts from './const'
+import Utils from './utils'
 
-let badWord = 'fuck';
-let niceWord = 'butterfly';
+let badWord = atob(Consts.BAD_WORD);
+let niceWord = Consts.NICE_WORD;
 
 const askForBadWord = () => {
 	return new Promise((resolve, reject) => {
@@ -32,8 +33,7 @@ const fetchSearchResults = () => {
 
 const pickRandomFile = (html) => {
 	return new Promise((resolve, reject) => {
-		const container = document.createElement('div');
-		container.innerHTML = html;
+		const container = Utils.CreateContainer(html);
 		const files = container.querySelectorAll('.code-list-item');
 		const fileIndex = Math.floor(Math.random() * files.length) + 1;
 		let fileUrl = files[fileIndex].querySelector('a:nth-child(2)').href;
@@ -54,8 +54,7 @@ const fetchFileForm = (url) => {
 		const xmlhttp =  new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function () {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-				const container = document.createElement('div');
-				container.innerHTML = xmlhttp.responseText;
+				const container = Utils.CreateContainer(xmlhttp.responseText);
 				const auth_token_input = container.querySelector('.octicon-pencil').parentElement.parentElement.querySelectorAll('input')[1];
 
 				resolve({
@@ -76,12 +75,6 @@ const fetchEditForm = (data) => {
 		const xmlhttp =  new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function () {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-
-				let html = xmlhttp.responseText.replace(new RegExp(badWord, 'ig'), niceWord);
-				document.open("text/html", "replace");
-				document.write(html);
-				document.close();
-
 				resolve(xmlhttp.responseText);
 			}
 		}
@@ -94,11 +87,31 @@ const fetchEditForm = (data) => {
 	});
 }
 
+const fetchProposeChangeForm = (html) => {
+	return new Promise((resolve, reject) => {
+		// extract all necessary data first
+
+		html = html.replace(new RegExp(badWord, 'ig'), niceWord);
+		document.open("text/html", "replace");
+		document.write(html);
+		document.close();
+
+		// const container = Utils.CreateContainer(html);
+		// const code = container.querySelector('.js-code-textarea').value;
+		// console.log(code);
+
+
+
+		resolve();
+	});
+}
+
 askForBadWord()
 	.then(fetchSearchResults)
 	.then(pickRandomFile)
 	.then(fetchFileForm)
 	.then(fetchEditForm)
+	.then(fetchProposeChangeForm)
 	.then(() => {
 			document.querySelector('#commit-description-textarea').value = 'Powered by Internet Cleaner ®'
 			console.log('I\'m done!');
