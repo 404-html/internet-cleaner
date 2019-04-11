@@ -14,7 +14,7 @@ const askForBadWord = () => {
 
 const fetchSearchResults = () => {
 	return new Promise((resolve, reject) => {
-
+		console.log('Fetching search results...');
 		const xmlhttp =  new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function () {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -33,6 +33,7 @@ const fetchSearchResults = () => {
 
 const pickRandomFile = (html) => {
 	return new Promise((resolve, reject) => {
+		console.log('Picking random file...');
 		const container = Utils.CreateContainer(html);
 		const files = container.querySelectorAll('.code-list-item');
 		const fileIndex = Math.floor(Math.random() * files.length) + 1;
@@ -50,7 +51,7 @@ const pickRandomFile = (html) => {
 
 const fetchFileForm = (url) => {
 	return new Promise((resolve, reject) => {
-
+		console.log('Fetching file form...');
 		const xmlhttp =  new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function () {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -71,11 +72,14 @@ const fetchFileForm = (url) => {
 
 const fetchEditForm = (data) => {
 	return new Promise((resolve, reject) => {
-
+		console.log('Fetching edit form...')
 		const xmlhttp =  new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function () {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-				resolve(xmlhttp.responseText);
+				resolve({
+					url: data.url,
+					html: xmlhttp.responseText
+				});
 			}
 		}
 		// TODO: reject on failure
@@ -87,20 +91,34 @@ const fetchEditForm = (data) => {
 	});
 }
 
-const fetchProposeChangeForm = (html) => {
+const fetchProposeChangeForm = (data) => {
 	return new Promise((resolve, reject) => {
+		console.log('Fetching propose change form...')
 		// extract all necessary data first
+		const container = Utils.CreateContainer(data.html);
 
-		html = html.replace(new RegExp(badWord, 'ig'), niceWord);
-		document.open("text/html", "replace");
-		document.write(html);
-		document.close();
-
-		// const container = Utils.CreateContainer(html);
-		// const code = container.querySelector('.js-code-textarea').value;
-		// console.log(code);
-
-
+		const xmlhttp =  new XMLHttpRequest();
+		xmlhttp.onreadystatechange = function () {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+				resolve(xmlhttp.responseText);
+			}
+		}
+		// TODO: reject on failure
+		xmlhttp.open('POST', data.url.replace('/blob/master/', '/tree-save/master/'));
+		var formData = new FormData();
+		formData.append('utf8', '✓');
+		formData.append('authenticity_token', (container.querySelector('.js-blob-form>input[name=authenticity_token]').value));
+		formData.append('filename', (container.querySelector('input[name=filename]').value));
+		formData.append('new_filename', (container.querySelector('input[name=new_filename]').value));
+		formData.append('commit', (container.querySelector('.js-commit-oid').value));
+		formData.append('quick_pull', (container.querySelector('input[name=quick_pull]').value));
+		formData.append('pr', '');
+		formData.append('content_changed', 'true');
+		formData.append('value', encodeURIComponent(container.querySelector('.js-code-textarea').value.replace(new RegExp(badWord, 'ig'), niceWord)));
+		formData.append('message', '');
+		formData.append('placeholder_message', ('Internet cleaning'));
+		formData.append('description', ('Powered by Internet Cleaner'));
+		xmlhttp.send(formData);
 
 		resolve();
 	});
@@ -112,8 +130,13 @@ askForBadWord()
 	.then(fetchFileForm)
 	.then(fetchEditForm)
 	.then(fetchProposeChangeForm)
-	.then(() => {
-			document.querySelector('#commit-description-textarea').value = 'Powered by Internet Cleaner ®'
+	.then((html) => {
+			// document.querySelector('#commit-description-textarea').value = 'Powered by Internet Cleaner ®'
+
+			document.open("text/html", "replace");
+			document.write(html);
+			document.close();
+
 			console.log('I\'m done!');
 		})
 		.catch((ex) => {
