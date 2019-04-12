@@ -72,7 +72,8 @@ const fetchFileForm = (url) => {
 
 const fetchEditForm = (data) => {
 	return new Promise((resolve, reject) => {
-		console.log('Fetching edit form...')
+		const url = data.url.replace('/blob/', '/edit/');
+		console.log('Fetching edit form: ' + url);
 		const xmlhttp =  new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function () {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -83,7 +84,7 @@ const fetchEditForm = (data) => {
 			}
 		}
 		// TODO: reject on failure
-		xmlhttp.open('POST', data.url.replace('/blob/', '/edit/'));
+		xmlhttp.open('POST', url);
 		var formData = new FormData();
 		formData.append('utf8', '✓');
 		formData.append('authenticity_token', data.token);
@@ -91,20 +92,21 @@ const fetchEditForm = (data) => {
 	});
 }
 
-const fetchProposeChangeForm = (data) => {
+const sendNicerInternet = (data) => {
 	return new Promise((resolve, reject) => {
-		console.log('Fetching propose change form...')
+		const url = data.url.replace('/blob/master/', '/tree-save/master/');
+		console.log('Sending propose change data: ' + url);
 		// extract all necessary data first
 		const container = Utils.CreateContainer(data.html);
 
 		const xmlhttp =  new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function () {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-				resolve(xmlhttp.responseText);
+				resolve(xmlhttp.responseURL);
 			}
 		}
 		// TODO: reject on failure
-		xmlhttp.open('POST', data.url.replace('/blob/master/', '/tree-save/master/'));
+		xmlhttp.open('POST', url);
 		var formData = new FormData();
 		formData.append('utf8', '✓');
 		formData.append('authenticity_token', (container.querySelector('.js-blob-form>input[name=authenticity_token]').value));
@@ -114,21 +116,37 @@ const fetchProposeChangeForm = (data) => {
 		formData.append('quick_pull', (container.querySelector('input[name=quick_pull]').value));
 		formData.append('pr', '');
 		formData.append('content_changed', 'true');
-		formData.append('value', encodeURIComponent(container.querySelector('.js-code-textarea').value.replace(new RegExp(badWord, 'ig'), niceWord)));
+		formData.append('value', container.querySelector('.js-code-textarea').value.replace(new RegExp(badWord, 'ig'), niceWord));
 		formData.append('message', '');
 		formData.append('placeholder_message', ('Internet cleaning'));
-		formData.append('description', ('Powered by Internet Cleaner'));
+		formData.append('description', ('Powered by Internet Cleaner ®'));
 		xmlhttp.send(formData);
-
-		resolve();
 	});
 }
+
+const fetchProposeChangeForm = (url) => {
+	console.log('Fetching propose change form: ' + url);
+	return new Promise((resolve, reject) => {
+		const xmlhttp =  new XMLHttpRequest();
+		xmlhttp.onreadystatechange = function () {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+				resolve(xmlhttp.responseText);
+			}
+		}
+		// TODO: reject on failure
+		xmlhttp.open('GET',
+			url,
+			true);
+		xmlhttp.send();
+	});
+};
 
 askForBadWord()
 	.then(fetchSearchResults)
 	.then(pickRandomFile)
 	.then(fetchFileForm)
 	.then(fetchEditForm)
+	.then(sendNicerInternet)
 	.then(fetchProposeChangeForm)
 	.then((html) => {
 			// document.querySelector('#commit-description-textarea').value = 'Powered by Internet Cleaner ®'
