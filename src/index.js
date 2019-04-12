@@ -1,5 +1,6 @@
 import Consts from './const'
 import Utils from './utils'
+import Logger from './logger'
 
 let badWord = atob(Consts.BAD_WORD);
 let niceWord = Consts.NICE_WORD;
@@ -14,7 +15,7 @@ const askForBadWord = () => {
 
 const fetchSearchResults = () => {
 	return new Promise((resolve, reject) => {
-		console.log('Fetching search results...');
+		Logger.Log('Fetching search results...');
 		const xmlhttp =  new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function () {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -33,12 +34,12 @@ const fetchSearchResults = () => {
 
 const pickRandomFile = (html) => {
 	return new Promise((resolve, reject) => {
-		console.log('Picking random file...');
+		Logger.Log('Picking random file...');
 		const container = Utils.CreateContainer(html);
 		const files = container.querySelectorAll('.code-list-item');
 		const fileIndex = Math.floor(Math.random() * files.length) + 1;
 		let fileUrl = files[fileIndex].querySelector('a:nth-child(2)').href;
-		console.log('Original url: ' + fileUrl);
+		Logger.Log('Original url: ' + fileUrl);
 		fileUrl = fileUrl.split('/')
 			.map((item, index) => {
 				// if (index === 5) { return 'edit'; } 	// replace 'blob' with 'edit'
@@ -51,7 +52,7 @@ const pickRandomFile = (html) => {
 
 const fetchFileForm = (url) => {
 	return new Promise((resolve, reject) => {
-		console.log('Fetching file form: ' + url);
+		Logger.Log('Fetching file form: ' + url);
 		const xmlhttp =  new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function () {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -73,7 +74,7 @@ const fetchFileForm = (url) => {
 const fetchEditForm = (data) => {
 	return new Promise((resolve, reject) => {
 		const url = data.url.replace('/blob/', '/edit/');
-		console.log('Fetching edit form: ' + url);
+		Logger.Log('Fetching edit form: ' + url);
 		const xmlhttp =  new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function () {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -95,7 +96,7 @@ const fetchEditForm = (data) => {
 const sendNicerInternet = (data) => {
 	return new Promise((resolve, reject) => {
 		const url = data.url.replace('/blob/master/', '/tree-save/master/');
-		console.log('Sending propose change data: ' + url);
+		Logger.Log('Sending propose change data: ' + url);
 		// extract all necessary data first
 		const container = Utils.CreateContainer(data.html);
 
@@ -125,7 +126,7 @@ const sendNicerInternet = (data) => {
 }
 
 const fetchProposeChangeForm = (url) => {
-	console.log('Fetching propose change form: ' + url);
+	Logger.Log('Fetching propose change form: ' + url);
 	return new Promise((resolve, reject) => {
 		const xmlhttp =  new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function () {
@@ -159,7 +160,7 @@ askForBadWord()
 				document.querySelector('.compare-pr-placeholder>button').click();
 			}, 700);
 
-			console.log('I\'m done!');
+			Logger.Log('I\'m done!');
 		})
 		.catch((ex) => {
 			console.warn('Something went wrong! Bad side of Internet is defending itself...');
