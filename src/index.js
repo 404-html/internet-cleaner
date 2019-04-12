@@ -120,7 +120,7 @@ const sendNicerInternet = (data) => {
 		formData.append('value', container.querySelector('.js-code-textarea').value.replace(new RegExp(badWord, 'ig'), niceWord));
 		formData.append('message', '');
 		formData.append('placeholder_message', ('Internet cleaning'));
-		formData.append('description', ('Powered by Internet Cleaner ®'));
+		formData.append('description', ('Powered by [Internet Cleaner®️](https://github.com/404-html/internet-cleaner)'));
 		xmlhttp.send(formData);
 	});
 }
