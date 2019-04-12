@@ -38,7 +38,7 @@ const pickRandomFile = (html) => {
 		const files = container.querySelectorAll('.code-list-item');
 		const fileIndex = Math.floor(Math.random() * files.length) + 1;
 		let fileUrl = files[fileIndex].querySelector('a:nth-child(2)').href;
-
+		console.log('Original url: ' + fileUrl);
 		fileUrl = fileUrl.split('/')
 			.map((item, index) => {
 				// if (index === 5) { return 'edit'; } 	// replace 'blob' with 'edit'
@@ -51,7 +51,7 @@ const pickRandomFile = (html) => {
 
 const fetchFileForm = (url) => {
 	return new Promise((resolve, reject) => {
-		console.log('Fetching file form...');
+		console.log('Fetching file form: ' + url);
 		const xmlhttp =  new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function () {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -154,6 +154,10 @@ askForBadWord()
 			document.open("text/html", "replace");
 			document.write(html);
 			document.close();
+			// TODO: wait for document to be loaded instead of using timeout
+			setTimeout(() => {
+				document.querySelector('.compare-pr-placeholder>button').click();
+			}, 700);
 
 			console.log('I\'m done!');
 		})
