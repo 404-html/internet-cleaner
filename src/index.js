@@ -42,7 +42,6 @@ const pickRandomFile = (html) => {
 		Logger.Log('Original url: ' + fileUrl);
 		fileUrl = fileUrl.split('/')
 			.map((item, index) => {
-				// if (index === 5) { return 'edit'; } 	// replace 'blob' with 'edit'
 				if (index === 6) { return 'master'; } 	// replace blob GUID with master
 				return item;
 			}).join('/')
@@ -150,8 +149,6 @@ askForBadWord()
 	.then(sendNicerInternet)
 	.then(fetchProposeChangeForm)
 	.then((html) => {
-			// document.querySelector('#commit-description-textarea').value = 'Powered by Internet Cleaner ®'
-
 			document.open("text/html", "replace");
 			document.write(html);
 			document.close();
@@ -163,6 +160,6 @@ askForBadWord()
 			Logger.Log('I\'m done!');
 		})
 		.catch((ex) => {
-			console.warn('Something went wrong! Bad side of Internet is defending itself...');
-			console.warn(ex)
+			Logger.Log('Something went wrong! Bad side of Internet is defending itself...');
+			Logger.Log(ex)
 		});
