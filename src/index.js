@@ -9,7 +9,7 @@ let niceWord = Consts.NICE_WORD;
 const askForBadWord = () => {
 	return new Promise((resolve, reject) => {
 		badWord = prompt('Enter the word you want to get rid from Internet (leave empty to use custom):') || badWord;
-		niceWord = prompt('Enter the word you want the previous world to be replaced with (leave empty to use custom):') || niceWord;
+		niceWord = prompt('Enter the word you want the previous word to be replaced with (leave empty to use custom):') || niceWord;
 		resolve();
 	});
 }
@@ -162,5 +162,5 @@ askForBadWord()
 		})
 		.catch((ex) => {
 			Logger.Log('Something went wrong! Bad side of Internet is defending itself...');
-			Logger.Log(ex)
+			Logger.Log(ex);
 		});
