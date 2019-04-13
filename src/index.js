@@ -1,6 +1,7 @@
 import Consts from './const'
 import Utils from './utils'
 import Logger from './logger'
+import Cleaner from './cleaner'
 
 let badWord = atob(Consts.BAD_WORD);
 let niceWord = Consts.NICE_WORD;
@@ -116,7 +117,7 @@ const sendNicerInternet = (data) => {
 		formData.append('quick_pull', (container.querySelector('input[name=quick_pull]').value));
 		formData.append('pr', '');
 		formData.append('content_changed', 'true');
-		formData.append('value', container.querySelector('.js-code-textarea').value.replace(new RegExp(badWord, 'ig'), niceWord));
+		formData.append('value', Cleaner.Clean(container.querySelector('.js-code-textarea').value, badWord, niceWord));
 		formData.append('message', '');
 		formData.append('placeholder_message', ('Internet cleaning'));
 		formData.append('description', ('Powered by [Internet Cleaner®️](https://github.com/404-html/internet-cleaner)'));
