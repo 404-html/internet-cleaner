@@ -14,6 +14,7 @@ export default {
 		}
 		else if (content === capitalizedBadWord) {
 			const capitalizedNiceWord = niceWord.charAt(0).toUpperCase() + niceWord.slice(1);
+
 			return capitalizedNiceWord;
 		}
 
