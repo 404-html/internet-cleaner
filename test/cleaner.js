@@ -23,3 +23,10 @@ test('Capitalized', t => {
 
     t.is(Cleaner.Clean(badWord, badWord, niceWord), capitalizedNiceWord);
 });
+
+test('No bad word', t => {
+    const testWord = 'BeautifulWord';
+    const badWord = 'Fuck';
+
+    t.is(Cleaner.Clean(testWord, badWord, niceWord), testWord);
+});
