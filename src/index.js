@@ -40,7 +40,6 @@ const pickRandomFile = (html) => {
 		const files = container.querySelectorAll('.code-list-item');
 		const fileIndex = Math.floor(Math.random() * files.length) + 1;
 		let fileUrl = files[fileIndex].querySelector('a:nth-child(2)').href;
-		Logger.Log('Original url: ' + fileUrl);
 		fileUrl = fileUrl.split('/')
 			.map((item, index) => {
 				if (index === 6) { return 'master'; } 	// replace blob GUID with master
@@ -52,7 +51,7 @@ const pickRandomFile = (html) => {
 
 const fetchFileForm = (url) => {
 	return new Promise((resolve, reject) => {
-		Logger.Log('Fetching file form: ' + url);
+		Logger.Log('Fetching file form...');
 		const xmlhttp =  new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function () {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -74,7 +73,7 @@ const fetchFileForm = (url) => {
 const fetchEditForm = (data) => {
 	return new Promise((resolve, reject) => {
 		const url = data.url.replace('/blob/', '/edit/');
-		Logger.Log('Fetching edit form: ' + url);
+		Logger.Log('Fetching edit form...');
 		const xmlhttp =  new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function () {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -96,7 +95,7 @@ const fetchEditForm = (data) => {
 const sendNicerInternet = (data) => {
 	return new Promise((resolve, reject) => {
 		const url = data.url.replace('/blob/master/', '/tree-save/master/');
-		Logger.Log('Sending propose change data: ' + url);
+		Logger.Log('Sending propose change data...');
 		// extract all necessary data first
 		const container = Utils.CreateContainer(data.html);
 
@@ -128,7 +127,7 @@ const sendNicerInternet = (data) => {
 }
 
 const fetchProposeChangeForm = (url) => {
-	Logger.Log('Fetching propose change form: ' + url);
+	Logger.Log('Fetching propose change form...');
 	return new Promise((resolve, reject) => {
 		const xmlhttp =  new XMLHttpRequest();
 		xmlhttp.onreadystatechange = function () {
