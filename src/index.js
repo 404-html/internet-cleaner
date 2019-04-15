@@ -121,7 +121,9 @@ const sendNicerInternet = (data) => {
 		formData.append('message', '');
 		formData.append('placeholder_message', ('Internet cleaning'));
 		formData.append('description', ('Powered by [Internet Cleaner®️](https://github.com/404-html/internet-cleaner)'));
-		xmlhttp.send(formData);
+		setTimeout(() => {
+			xmlhttp.send(formData);
+		}, 2000);
 	});
 }
 
