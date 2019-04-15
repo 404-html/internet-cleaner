@@ -8,27 +8,32 @@ const base64BadWord = Consts.BAD_WORD;
 const niceWord = Consts.NICE_WORD;
 
 test('LowerCase', t => {
-    const badWord = 'fuck';
+    const testSentence = 'fuck fack fuck';
+    const badWord = atob(base64BadWord);
+    const expectValue = 'butterfly fack butterfly'
 
-    t.is(Cleaner.Clean(badWord, badWord, niceWord), niceWord.toLowerCase());
+    t.is(Cleaner.Clean(testSentence, badWord, niceWord), expectValue);
 });
 
 test('UpperCase', t => {
-    const badWord = 'FUCK';
+    const testSentence = 'FUCK FACK FUCK';
+    const badWord = atob(base64BadWord);
+    const expectValue = 'BUTTERFLY FACK BUTTERFLY'
 
-    t.is(Cleaner.Clean(badWord, badWord, niceWord), niceWord.toUpperCase());
+    t.is(Cleaner.Clean(testSentence, badWord, niceWord), expectValue);
 });
 
 test('Capitalized', t => {
-    const badWord = 'Fuck';
-    const capitalizedNiceWord = niceWord.charAt(0).toUpperCase() + niceWord.slice(1);
+    const testSentence = 'Fuck Fack Fuck';
+    const badWord = atob(base64BadWord);
+    const expectValue = 'Butterfly Fack Butterfly'
 
-    t.is(Cleaner.Clean(badWord, badWord, niceWord), capitalizedNiceWord);
+    t.is(Cleaner.Clean(testSentence, badWord, niceWord), expectValue);
 });
 
 test('No bad word', t => {
-    const testWord = 'BeautifulWord';
-    const badWord = 'Fuck';
+    const testWord = 'beautiful word';
+    const badWord = atob(base64BadWord);
 
     t.is(Cleaner.Clean(testWord, badWord, niceWord), testWord);
 });
