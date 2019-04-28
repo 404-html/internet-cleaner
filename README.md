@@ -10,5 +10,4 @@ javascript:!function(e){var t={};function n(r){if(t[r])return t[r].exports;var o
 
 <img src="https://github.com/404-html/internet-cleaner/blob/master/assets/showcase.gif?raw=true" alt="drawing" width="100%"/>
 
-### Do you like it? Follow me on GitHub or donate:
-http://PayPal.me/404html
+### Do you like it? Follow me on GitHub!
