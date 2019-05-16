@@ -38,3 +38,10 @@ test('Bad word of base64', t => {
 
     t.is(Cleaner.Clean(decodedBadWord, decodedBadWord, niceWord), niceWord.toLowerCase());
 });
+
+test('LowerCase & UpperCase & Capitalized', t => {
+    const testSentence = 'fcuk FCUK Fcuk';
+    const expectValue = 'butterfly BUTTERFLY Butterfly'
+
+    t.is(Cleaner.Clean(testSentence, badWord, niceWord), expectValue);
+});
