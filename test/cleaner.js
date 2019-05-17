@@ -45,3 +45,10 @@ test('LowerCase & UpperCase & Capitalized', t => {
 
     t.is(Cleaner.Clean(testSentence, badWord, niceWord), expectValue);
 });
+
+test('Mixed content from https://github.com/pythsourceproductions/AFR-Station/pull/1/files', t => {
+    const testSentence = 'var/speak = pick("Grr...", "Fcuk...", "Fcuking...", "Fcuk this fcuking.. fcuk..")';
+    const expectValue = 'var/speak = pick("Grr...", "Butterfly...", "Butterflying...", "Butterfly this butterflying.. butterfly..")';
+
+    t.is(Cleaner.Clean(testSentence, badWord, niceWord), expectValue);
+});
