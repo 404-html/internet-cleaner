@@ -10,4 +10,23 @@ javascript:!function(e){var t={};function n(r){if(t[r])return t[r].exports;var o
 
 <img src="https://github.com/404-html/internet-cleaner/blob/master/assets/showcase.gif?raw=true" alt="drawing" width="100%"/>
 
-### Do you like it? Follow me on GitHub!
+
+## Contributors
+<table>
+	<tr>
+		<td align="center">
+			<a href="https://github.com/roottool">
+				<img src="https://avatars2.githubusercontent.com/u/11808736?s=400&v=4" width="100px;" alt="roottool" />
+				<br /><sub><b>roottool</b></sub>
+			</a>
+		</td>
+		<td align="center">
+			<a href="https://github.com/500-html">
+				<img src="https://avatars1.githubusercontent.com/u/49574697?s=400&v=4" width="100px;" alt="roottool" />
+				<br /><sub><b>500-html</b></sub>
+			</a>
+		</td>
+	</tr>
+</table>
+
+### Do you like it? Give it a star! ⭐️
