@@ -14,8 +14,8 @@
     "atob": "^2.1.2",
     "ava": "^1.4.1",
     "esm": "^3.2.22",
-    "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.0"
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
   },
   "ava": {
     "require": [
